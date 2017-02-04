@@ -3,10 +3,8 @@ MAINTAINER binet@cern.ch
 
 ##Basic image
 
-RUN rpm -ivh --force http://ftp.scientificlinux.org/linux/scientific/7x/x86_64/os/Packages/sl-release-7.2-2.sl7.x86_64.rpm
+RUN rpm -ivh --force http://ftp1.scientificlinux.org/linux/scientific/7x/x86_64/os/Packages/sl-release-7.3-4.sl7.x86_64.rpm
 
-ADD dot-bashrc                    /root/.bashrc
-ADD dot-bash_profile              /root/.bash_profile
 
 ##Add repos. Example from slc 6
 #ADD yum-repos-d-slc6-os.repo      /etc/yum.repos.d/slc6-os.repo
