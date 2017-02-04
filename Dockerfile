@@ -21,9 +21,11 @@ RUN yum -y update
 RUN yum -y install \
            file which
 
-RUN yum -y install binutils-devel gcc gcc-c++ gcc-gfortran git make patch python-devel \
-	   glibc.i686 zlib.i686 ncurses-libs.i686 bzip2-libs.i686 uuid.i686 libxcb.i686 \
-	   libXmu.so.6 libncurses.so.5 tcsh
+RUN yum -y install binutils-devel gcc gcc-c++ gcc-gfortran git make 
+
+#patch python-devel \
+#	   glibc.i686 zlib.i686 ncurses-libs.i686 bzip2-libs.i686 uuid.i686 libxcb.i686 \
+#	   libXmu.so.6 libncurses.so.5 tcsh
 
 
 #These are needed to build IRAF
@@ -65,7 +67,7 @@ RUN yum -y install \
 RUN echo 'docker' | passwd root --stdin
 RUN useradd -ms /bin/bash latex 
 RUN usermod -aG wheel latex
-RUN echo 'docker' | passwd vimos --stdin
+RUN echo 'docker' | passwd latex --stdin
 USER latex
 WORKDIR /home/latex
 ENV HOME /home/latex
