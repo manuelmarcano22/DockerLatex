@@ -3,12 +3,19 @@ MAINTAINER binet@cern.ch
 
 ##Basic image
 
-#RUN rpm -ivh --force http://ftp.scientificlinux.org/linux/scientific/7x/x86_64/os/Packages/sl-release-7.2-2.sl7.x86_64.rpm
-#
-#
-#RUN yum -y erase centos-release
-#RUN yum -y erase all
-#RUN yum -y distro-sync
+RUN rpm -ivh --force http://ftp.scientificlinux.org/linux/scientific/7x/x86_64/os/Packages/sl-release-7.2-2.sl7.x86_64.rpm
+
+ADD dot-bashrc                    /root/.bashrc
+ADD dot-bash_profile              /root/.bash_profile
+
+##Add repos. Example from slc 6
+#ADD yum-repos-d-slc6-os.repo      /etc/yum.repos.d/slc6-os.repo
+#ADD yum-repos-d-slc6-updates.repo /etc/yum.repos.d/slc6-updates.repo
+#ADD yum-repos-d-slc6-extras.repo  /etc/yum.repos.d/slc6-extras.repo
+
+RUN yum -y erase centos-release
+RUN yum -y erase all
+RUN yum -y distro-sync
 #ENV HOME /root
 
 ##Extra
@@ -31,26 +38,40 @@ RUN yum -y install \
            ncurses-devel \
            texinfo \
            wget \
-	   bzip2 sudo passwd bc csh vim-X11 libXScrnSaver evince
+	   bzip2 sudo passwd bc csh vim libXScrnSaver evince unzip \
+	   perl-Tk perl-Digest-MD5
 
-Run yum -y install texlive texlive-latex texlive-xetex texlive-collection-latex \
-	texlive-collection-latexrecommended \
-	texlive-collection-latexextra
+RUN yum -y install \
+	   texlive-* 
+
+#RUN yum -y install libxslt-devel libXt-devel zip
+
+##TO install Anaconda with Python 3.4
+#RUN echo 'export PATH=/opt/conda/bin:$PATH' > /etc/profile.d/conda.sh && \
+#    wget --quiet https://repo.continuum.io/archive/Anaconda3-4.2.0-Linux-x86_64.sh -O ~/anaconda.sh
+#RUN /bin/bash ~/anaconda.sh -b -p /opt/conda && \
+#    rm ~/anaconda.sh
+#ENV PATH /opt/conda/bin:$PATH
+
+##To install minicoda python 3.5
+#RUN echo 'export PATH=/opt/conda/bin:$PATH' > /etc/profile.d/conda.sh && \
+#    wget --quiet https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh  -O ~/miniconda.sh && \
+#    /bin/bash ~/miniconda.sh -b -p /opt/conda && \
+#    rm ~/miniconda.sh
+#RUN /opt/conda/bin/conda  install -y -c astropy python-cpl=0.7.2
+#ENV PATH /opt/conda/bin:$PATH
+
+
 
 ##Add user called latex with sudo privilegies and passwd docker
 RUN echo 'docker' | passwd root --stdin
 RUN useradd -ms /bin/bash latex 
 RUN usermod -aG wheel latex
-RUN echo 'docker' | passwd latex --stdin
+RUN echo 'docker' | passwd vimos --stdin
 USER latex
+WORKDIR /home/latex
 ENV HOME /home/latex
-WORKDIR /home/latex
-RUN git clone https://github.com/manuelmarcano22/config-files.git
-WORKDIR /home/latex/config-files
-RUN bash setup.sh
-
-WORKDIR /home/latex
 
 
 
-
+## EOF
